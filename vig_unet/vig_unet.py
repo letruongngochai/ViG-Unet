@@ -38,7 +38,7 @@ class ViG_Unet(nn.Module):
         self.up3 = Up(128 + 64, 64)
         self.grapher_ffn9 = ViG_Block(64, drop_path=drop_path, dilation=dilation)
         
-        self.up4 = Up(64, 32)
+        self.up4 = Up(64 + 32, 32)
         self.grapher_ffn10 = ViG_Block(32, drop_path=drop_path, dilation=dilation)
         
         self.out_conv = OutConv(32, n_classes)
@@ -60,6 +60,8 @@ class ViG_Unet(nn.Module):
         x5 = self.down4(x4)
         x5 = self.grapher1(x5)
         x5 = self.grapher2(x5)
+        print("x1", x1.size())
+        print("x2", x2.size())
         print("x4", x4.size())
         print("x5", x5.size())
 
