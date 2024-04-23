@@ -4,7 +4,7 @@
 import numpy as np
 from torch import nn
 import torch.nn.functional as F
-from grapher import Grapher
+from .grapher import Grapher
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 
 # class Grapher(nn.Module):

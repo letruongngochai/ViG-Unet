@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from unet_parts import *
-from vig import ViG_Block, Grapher
+from .unet_parts import *
+from .vig import ViG_Block, Grapher
 
 from torchsummary import summary
 
@@ -78,5 +78,5 @@ class ViG_Unet(nn.Module):
         outputs = self.out_conv(x)
         return outputs
 
-model = ViG_Unet(n_channels=3, n_classes=3)
-print(summary(model, (3, 224, 224))) #572x572
+# model = ViG_Unet(n_channels=3, n_classes=3)
+# print(summary(model, (3, 224, 224))) #572x572

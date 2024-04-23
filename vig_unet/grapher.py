@@ -1,9 +1,9 @@
 import numpy as np
 import torch
 from torch import nn
-from nn import BasicConv, batched_index_select, act_layer
-from edge import DenseDilatedKnnGraph
-from pos_embed import get_2d_relative_pos_embed
+from .nn import BasicConv, batched_index_select, act_layer
+from .edge import DenseDilatedKnnGraph
+from .pos_embed import get_2d_relative_pos_embed
 import torch.nn.functional as F
 from timm.models.layers import DropPath
 
