@@ -9,7 +9,7 @@ class Stem(nn.Module):
             nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding="same"),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=2),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
@@ -21,7 +21,7 @@ class Down(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()
         self.down = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, stride = 2),
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, stride = 2, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
