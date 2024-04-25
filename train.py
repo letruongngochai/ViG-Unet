@@ -20,8 +20,8 @@ from vig_unet import ViG_Unet
 from utils.data_loading import BasicDataset
 from utils.dice_score import dice_loss
 
-dir_img = Path('../brain-tumor-segmentation/images/')
-dir_mask = Path('../brain-tumor-segmentation/masks')
+dir_img = Path('/kaggle/input/brain-tumor-segmentation/images')
+dir_mask = Path('/kaggle/input/brain-tumor-segmentation/masks')
 dir_checkpoint = Path('/kaggle/working/checkpoints')
 
 
@@ -31,7 +31,7 @@ def train_model(
         epochs: int = 5,
         batch_size: int = 1,
         learning_rate: float = 1e-4,
-        val_percent: float = 0.1,
+        val_percent: float = 0.2,
         save_checkpoint: bool = True,
         img_scale: float = 0.5,
         amp: bool = False,
@@ -131,21 +131,27 @@ def train_model(
                 pbar.set_postfix(**{'loss (batch)': loss.item()})
 
                 # Evaluation round
-                division_step = (n_train // (5 * batch_size))
+                
+                division_step = n_train // batch_size #equals after 2 epoches
+                # print("n_train:", n_train)
+                # print("division_step:", division_step)
                 if division_step > 0:
                     if global_step % division_step == 0:
-                        histograms = {}
-                        for tag, value in model.named_parameters():
-                            tag = tag.replace('/', '.')
-                            if not (torch.isinf(value) | torch.isnan(value)).any():
-                                histograms['Weights/' + tag] = wandb.Histogram(value.data.cpu())
-                            if not (torch.isinf(value.grad) | torch.isnan(value.grad)).any():
-                                histograms['Gradients/' + tag] = wandb.Histogram(value.grad.data.cpu())
+                        print("true", global_step, division_step)
+                        # histograms = {}
+                        # for tag, value in model.named_parameters():
+                        #     tag = tag.replace('/', '.')
+                        #     if not (torch.isinf(value) | torch.isnan(value)).any():
+                        #         histograms['Weights/' + tag] = wandb.Histogram(value.data.cpu())
+                        #     if not (torch.isinf(value.grad) | torch.isnan(value.grad)).any():
+                        #         histograms['Gradients/' + tag] = wandb.Histogram(value.grad.data.cpu())
 
                         val_score = evaluate(model, val_loader, device, amp)
-                        scheduler.step(val_score)
-
                         logging.info('Validation Dice score: {}'.format(val_score))
+                        print('Validation Dice score: {}'.format(val_score))
+                        # scheduler.step(val_score)
+                        scheduler.step()
+                        
                         try:
                             experiment.log({
                                 'learning rate': optimizer.param_groups[0]['lr'],
@@ -161,6 +167,8 @@ def train_model(
                             })
                         except:
                             pass
+                    # else:
+                    #     print("false")
 
         if save_checkpoint:
             Path(dir_checkpoint).mkdir(parents=True, exist_ok=True)
