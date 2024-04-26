@@ -132,7 +132,9 @@ def train_model(
 
                 # Evaluation round
                 
-                division_step = n_train // batch_size #equals after 2 epoches
+                division_step = n_train // batch_size * 5  #equals after 2 * 5 epoch
+                # division_step = n_train // batch_size  #equals after 2 epoch
+                # division_step = n_train // (batch_size * 10) #equals after train 10%
                 # print("n_train:", n_train)
                 # print("division_step:", division_step)
                 if division_step > 0:
@@ -146,9 +148,10 @@ def train_model(
                         #     if not (torch.isinf(value.grad) | torch.isnan(value.grad)).any():
                         #         histograms['Gradients/' + tag] = wandb.Histogram(value.grad.data.cpu())
 
-                        val_score = evaluate(model, val_loader, device, amp)
+                        val_score, iou_val_score = evaluate(model, val_loader, device, amp)
                         logging.info('Validation Dice score: {}'.format(val_score))
                         print('Validation Dice score: {}'.format(val_score))
+                        print('Validation IoU score: {}'.format(iou_val_score))
                         # scheduler.step(val_score)
                         scheduler.step()
                         

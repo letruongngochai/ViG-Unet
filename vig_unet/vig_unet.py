@@ -5,7 +5,6 @@ import torch.nn.functional as F
 from .unet_parts import *
 from .vig import ViG_Block, Grapher
 
-
 class ViG_Unet(nn.Module):
     def __init__(self, n_channels, n_classes, k=9, drop_path=0., dilation=1):
         super().__init__()
